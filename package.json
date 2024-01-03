@@ -4,27 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/CRUDBookNoDB.js",
-    "dev": "nodemon src/CRUDBookNoDB.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "format": "prettier --write *.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NatthaphatSuknakkit/NodeREST.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/NatthaphatSuknakkit/NodeREST/issues"
-  },
-  "homepage": "https://github.com/NatthaphatSuknakkit/NodeREST#readme",
   "devDependencies": {
-    "nodemon": "^2.0.22",
-    "prettier": "^2.8.3"
+    "nodemon": "^3.0.2",
+    "prettier": "^3.1.1"
   },
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2"
   }
 }

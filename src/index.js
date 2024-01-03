@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 
 const express = require("express");
@@ -6,11 +5,9 @@ const app = express();
 const port = process.env.PORT;
 
 app.get("/", (req, res) => {
-
-    res.send("I miss you");
+  res.send("Hello World! Nattaphat Check nodemon");
 });
 
 app.listen(port, () => {
-
-    console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Example app listening at http://localhost:${port}`);
 });

@@ -61,7 +61,7 @@ app.post('/books', (req, res) => {
 });
 
 // route to update a book
-app.put('/books/:id', (req, res) => {
+app.put('/book/:id', (req, res) => {
     const book = req.body;
     db.run('UPDATE books SET title = ?, author = ? WHERE id = ?', book.title, book.author, req.params.id, function(err) {
         if (err) {
@@ -84,6 +84,4 @@ app.delete('/books/:id', (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`Listening on port ${port}...`));

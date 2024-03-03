@@ -1,6 +1,6 @@
 // Description: Node Express REST API with Sequelize and SQLite CRUD Book
 // npm install express sequelize sqlite3
-// Run this file withh node SeqlizeSQLiteCRUDBook.js
+// Run this file with node SeqlizeSQLiteCRUDBook.js
 // Test with Postman
 
 const express = require("express");
@@ -17,8 +17,8 @@ const sequelize = new Sequelize("database", "username", "password", {
   storage: "./Database/SQBooks.sqlite",
 });
 
-// define the Table model
-const user = sequelize.define("user", {
+// define the Table model table
+const User = sequelize.define("User", {
   user_id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -32,33 +32,45 @@ const user = sequelize.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  /*reservation_id: {
-    type: Sequelize.STRING,
-    foreignKey: false,
-  },*/
-});
-
-const movie = sequelize.define("movie", {
-  movie_id: {
+  phone: {
     type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  movie_name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  genre: {
-    type: Sequelize.STRING,
     allowNull: false,
   },
 });
 
-const Reservation = sequelize.define("Reservation", {
-  Reservation_id: {
+const product = sequelize.define("product", {
+  product_ID: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+  },
+  product_name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  quantity_available: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  price: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+});
+
+const order_detail = sequelize.define("order_detail", {
+  Order_dID: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  user_ID: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+  product_ID: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
   },
   Reservation_Date_Time: {
     type: Sequelize.STRING,
@@ -66,283 +78,282 @@ const Reservation = sequelize.define("Reservation", {
   },
 });
 
-const showtime = sequelize.define("showtime", {
-  showtime_id: {
+const Order = sequelize.define("Order", {
+  Order_ID: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  starttime: {
-    type: Sequelize.STRING,
+  Order_dID: {
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
-  theater: {
-    type: Sequelize.STRING,
+  Price: {
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
 });
 
-// create the books table if it doesn't exist
+// create the tables if they don't exist
 sequelize.sync();
 
-// route to get all user
-app.get("/user", (req, res) => {
-  user.findAll().then((user) => {
-      res.json(user);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get all users
+app.get("/User", (req, res) => {
+  User.findAll().then((User) => {
+    res.json(User);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // route to get a user by id
-app.get("/user/:id", (req, res) => {
-  user.findByPk(req.params.id).then((user) => {
-      if (!user) {
-        res.status(404).send("user not found");
-      } else {
-        res.json(user);
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+app.get("/User/:id", (req, res) => {
+  User.findByPk(req.params.id).then((User) => {
+    if (!User) {
+      res.status(404).send("User not found");
+    } else {
+      res.json(User);
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // route to create a new user
-app.post("/user", (req, res) => {
-  user.create(req.body).then((user) => {
-      res.send(user);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+app.post("/User", (req, res) => {
+  User.create(req.body).then((User) => {
+    res.send(User);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // route to update a user
-app.put("/user/:id", (req, res) => {
-  user.findByPk(req.params.id).then((user) => {
-      if (!user) {
-        res.status(404).send("user not found");
-      } else {
-        user.update(req.body).then(() => {
-            res.send(user);
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+app.put("/User/:id", (req, res) => {
+  User.findByPk(req.params.id).then((User) => {
+    if (!User) {
+      res.status(404).send("User not found");
+    } else {
+      User.update(req.body).then(() => {
+        res.send(User);
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // route to delete a user
-app.delete("/user/:id", (req, res) => {
-  user.findByPk(req.params.id).then((user) => {
-      if (!user) {
-        res.status(404).send("user not found");
-      } else {
-        user.destroy().then(() => {
-            res.send({});
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+app.delete("/User/:id", (req, res) => {
+  User.findByPk(req.params.id).then((User) => {
+    if (User) {
+      res.status(404).send("User not found");
+    } else {
+      User.destroy().then(() => {
+        res.send({});
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to get all movie
-app.get("/movie", (req, res) => {
-  movie.findAll().then((movie) => {
-      res.json(movie);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get all products
+app.get("/product", (req, res) => {
+  product.findAll().then((product) => {
+    res.json(product);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to get a movie by id
-app.get("/movie/:id", (req, res) => {
-  movie.findByPk(req.params.id).then((movie) => {
-      if (!movie) {
-        res.status(404).send("movie not found");
-      } else {
-        res.json(movie);
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get a product by id
+app.get("/product/:id", (req, res) => {
+  product.findByPk(req.params.id).then((product) => {
+    if (!product) {
+      res.status(404).send("product not found");
+    } else {
+      res.json(product);
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to create a new movie
-app.post("/movie", (req, res) => {
-  movie.create(req.body).then((movie) => {
-      res.send(movie);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+app.post("/product", (req, res) => {
+  product.create(req.body).then((product) => {
+    res.send(product);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to update a movie
-app.put("/movie/:id", (req, res) => {
-  movie.findByPk(req.params.id).then((movie) => {
-      if (!movie) {
-        res.status(404).send("movie not found");
-      } else {
-        movie.update(req.body).then(() => {
-            res.send(movie);
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to update a product
+app.put("/product/:id", (req, res) => {
+  product.findByPk(req.params.id).then((product) => {
+    if (!product) {
+      res.status(404).send("product not found");
+    } else {
+      product.update(req.body).then(() => {
+        res.send(product);
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to delete a movie
-app.delete("/movie/:id", (req, res) => {
-  movie.findByPk(req.params.id).then((movie) => {
-      if (!movie) {
-        res.status(404).send("movie not found");
-      } else {
-        movie.destroy().then(() => {
-            res.send({});
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to delete a product
+app.delete("/product/:id", (req, res) => {
+  product.findByPk(req.params.id).then((product) => {
+    if (!product) {
+      res.status(404).send("Product not found");
+    } else {
+      product.destroy().then(() => {
+        res.send({});
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to get all reservation
-app.get("/Reservation", (req, res) => {
-  Reservation.findAll().then((Reservation) => {
-      res.json(Reservation);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get all order_details
+app.get("/order_detail", (req, res) => {
+  order_detail.findAll().then((order_detail) => {
+    res.json(order_detail);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to get a reservation by id
-app.get("/Reservation/:id", (req, res) => {
-  Reservation.findByPk(req.params.id).then((Reservation) => {
-      if (!Reservation) {
-        res.status(404).send("Reservation not found");
-      } else {
-        res.json(Reservation);
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get an order_detail by id
+app.get("/order_detail/:id", (req, res) => {
+  order_detail.findByPk(req.params.id).then((order_detail) => {
+    if (!order_detail) {
+      res.status(404).send("Order Detail not found");
+    } else {
+      res.json(order_detail);
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to create a new reservation
-app.post("/Reservation", (req, res) => {
-  Reservation.create(req.body).then((Reservation) => {
-      res.send(Reservation);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to create a new order_detail
+app.post("/order_detail", (req, res) => {
+  order_detail.create(req.body).then((order_detail) => {
+    res.send(order_detail);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to update a reservation
-app.put("/Reservation/:id", (req, res) => {
-  Reservation.findByPk(req.params.id).then((Reservation) => {
-      if (!Reservation) {
-        res.status(404).send("Reservation not found");
-      } else {
-        Reservation.update(req.body).then(() => {
-            res.send(Reservation);
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to update an order_detail
+app.put("/order_detail/:id", (req, res) => {
+  order_detail.findByPk(req.params.id).then((order_detail) => {
+    if (!order_detail) {
+      res.status(404).send("Order Detail not found");
+    } else {
+      order_detail.update(req.body).then(() => {
+        res.send(order_detail);
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to delete a reservation
-app.delete("/Reservation/:id", (req, res) => {
-  Reservation.findByPk(req.params.id).then((Reservation) => {
-      if (!Reservation) {
-        res.status(404).send("Reservation not found");
-      } else {
-        Reservation.destroy().then(() => {
-            res.send({});
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to delete an order_detail
+app.delete("/order_detail/:id", (req, res) => {
+  order_detail.findByPk(req.params.id).then((order_detail) => {
+    if (!order_detail) {
+      res.status(404).send("Order Detail not found");
+    } else {
+      order_detail.destroy().then(() => {
+        res.send({});
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to get all showtime
-app.get("/showtime", (req, res) => {
-  showtime.findAll().then((showtime) => {
-      res.json(showtime);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get all orders
+app.get("/order", (req, res) => {
+  Order.findAll().then((order) => {
+    res.json(order);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to get a showtime by id
-app.get("/showtime/:id", (req, res) => {
-  showtime.findByPk(req.params.id).then((showtime) => {
-      if (!showtime) {
-        res.status(404).send("showtime not found");
-      } else {
-        res.json(showtime);
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to get an order by id
+app.get("/order/:id", (req, res) => {
+  Order.findByPk(req.params.id).then((order) => {
+    if (order) {
+      res.status(404).send("Order not found");
+    } else {
+      res.json(order);
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to create a new shoetime
-app.post("/showtime", (req, res) => {
-  showtime.create(req.body).then((showtime) => {
-      res.send(showtime);
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to create a new order
+app.post("/order", (req, res) => {
+  Order.create(req.body).then((order) => {
+    res.send(order);
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to update a showtime
-app.put("/showtime/:id", (req, res) => {
-  showtime.findByPk(req.params.id).then((showtime) => {
-      if (!showtime) {
-        res.status(404).send("showtime not found");
-      } else {
-        showtime.update(req.body).then(() => {
-            res.send(showtime);
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to update an order
+app.put("/order/:id", (req, res) => {
+  Order.findByPk(req.params.id).then((order) => {
+    if (!order) {
+      res.status(404).send("Order not found");
+    } else {
+      order.update(req.body).then(() => {
+        res.send(order);
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
-// route to delete a showtime
-app.delete("/showtime/:id", (req, res) => {
-  showtime.findByPk(req.params.id).then((showtime) => {
-      if (!showtime) {
-        res.status(404).send("showtime not found");
-      } else {
-        showtime.destroy().then(() => {
-            res.send({});
-          }).catch((err) => {
-            res.status(500).send(err);
-          });
-      }
-    }).catch((err) => {
-      res.status(500).send(err);
-    });
+// route to delete an order
+app.delete("/order/:id", (req, res) => {
+  Order.findByPk(req.params.id).then((order) => {
+    if (!order) {
+      res.status(404).send("Order not found");
+    } else {
+      order.destroy().then(() => {
+        res.send({});
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // start the server

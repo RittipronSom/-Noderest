@@ -72,8 +72,8 @@ const order_detail = sequelize.define("order_detail", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  Reservation_Date_Time: {
-    type: Sequelize.STRING,
+  Order_ID: {
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
 });
@@ -148,7 +148,7 @@ app.put("/User/:id", (req, res) => {
 // route to delete a user
 app.delete("/User/:id", (req, res) => {
   User.findByPk(req.params.id).then((User) => {
-    if (User) {
+    if (!User) {
       res.status(404).send("User not found");
     } else {
       User.destroy().then(() => {

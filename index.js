@@ -88,10 +88,7 @@ const Order = sequelize.define("Order", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  Price: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
+  
 });
 
 // create the tables if they don't exist

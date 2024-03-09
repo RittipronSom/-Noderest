@@ -33,7 +33,7 @@ const User = sequelize.define("User", {
     allowNull: false,
   },
   phone: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
   },
 });
@@ -90,6 +90,12 @@ const Order = sequelize.define("Order", {
   },
   
 });
+Order.hasMany(order_detail, {foreignKey: 'Order_ID'})
+order_detail.belongsTo(Order, {foreignKey: 'Order_ID'})
+
+order_detail.hasMany(product, {foreignKey: 'product_ID'})
+product.belongsTo(order_detail, {foreignKey: 'product_ID'})
+
 
 // create the tables if they don't exist
 sequelize.sync();
@@ -290,7 +296,10 @@ app.delete("/order_detail/:id", (req, res) => {
 
 // route to get all orders
 app.get("/order", (req, res) => {
-  Order.findAll().then((order) => {
+  Order.findAll({include:[{
+    model: order_detail ,
+  
+  }]}).then((order) => {
     res.json(order);
   }).catch((err) => {
     res.status(500).send(err);

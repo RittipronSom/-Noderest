@@ -93,10 +93,6 @@ const Order = sequelize.define("Order", {
 Order.hasMany(order_detail, {foreignKey: 'Order_ID'})
 order_detail.belongsTo(Order, {foreignKey: 'Order_ID'})
 
-order_detail.hasMany(product, {foreignKey: 'product_ID'})
-product.belongsTo(order_detail, {foreignKey: 'product_ID'})
-
-
 // create the tables if they don't exist
 sequelize.sync();
 
